@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dynamic Time & Theme Page</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      transition: background-color 0.5s, color 0.5s;
+    }
+    #time {
+      font-size: 3rem;
+      margin-top: 2rem;
+    }
+    #modeToggle {
+      margin-top: 2rem;
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    body.morning:not(.dark-mode) {
+      background-color: #FFFAE3;
+      color: #333;
+    }
+    body.afternoon:not(.dark-mode) {
+      background-color: #FFE4B5;
+      color: #333;
+    }
+    body.night:not(.dark-mode) {
+      background-color: #2C3E50;
+      color: #ECF0F1;
+    }
+    body.dark-mode {
+      background-color: #1E1E1E;
+      color: #F5F5F5;
+    }
+  </style>
+</head>
+<body>
+  <h1>Welcome!</h1>
+  <div id="time">--:--:--</div>
+  <button id="modeToggle">Switch to Dark Mode</button>
+
+  <script>
+    const timeEl = document.getElementById('time');
+    const btn = document.getElementById('modeToggle');
+
+    function updateTimeAndBackground() {
+      const now = new Date();
+      const hh = String(now.getHours()).padStart(2, '0');
+      const mm = String(now.getMinutes()).padStart(2, '0');
+      const ss = String(now.getSeconds()).padStart(2, '0');
+      timeEl.textContent = `${hh}:${mm}:${ss}`;
+      if (!document.body.classList.contains('dark-mode')) {
+        document.body.classList.remove('morning', 'afternoon', 'night');
+        if (now.getHours() >= 6 && now.getHours() < 12) {
+          document.body.classList.add('morning');
+        } else if (now.getHours() < 18) {
+          document.body.classList.add('afternoon');
+        } else {
+          document.body.classList.add('night');
+        }
+      }
+    }
+
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark-mode');
+      btn.textContent = document.body.classList.contains('dark-mode')
+        ? 'Switch to Light Mode'
+        : 'Switch to Dark Mode';
+    }
+    btn.addEventListener('click', toggleDarkMode);
+    updateTimeAndBackground();
+    setInterval(updateTimeAndBackground, 1000);
+  </script>
+</body>
+</html>
